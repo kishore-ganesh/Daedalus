@@ -1,0 +1,27 @@
+.navBar{
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    justify-content: flex-start;
+    padding: 0px;
+    background: linear-gradient(to right, rgb(77, 122, 206),rgb(77, 122, 210));
+    border-radius: 5px;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    
+}
+
+.navItem{
+    
+    font-size: 1.2em;
+    padding: 15px;  
+    
+}
+
+
+.selected{
+    background: rgba(255, 255, 255, 0.1);
+    height: 100%;
+
+}
