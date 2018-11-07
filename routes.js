@@ -5,18 +5,29 @@ const auth=require('./auth');
 
 auth.initializePassport();
 
-posts=[{
-    title: "First Post",
-    postContent: "Content"
-},
-{
-    title: "Second post",
-    postContent: "Second post"
-}] 
 
 routes.post('/posts', (req, res)=>{
    database.queryDatabase("postsdb", "posts").then((posts)=>{
-       res.send(posts);
+    
+    for(let i=0; i<posts.length; i++){
+        post=posts[i];
+    
+        post.liked=false; 
+        
+        if(post.likedby&&req.user){
+            
+            for(let j=0; j<post.likedby.length;j++){
+                if(post.likedby[j].toString()==req.user._id.toString()){
+                    post.liked=true;
+                    break;
+                }
+            }
+
+        }
+       
+    }
+
+    res.send(posts);
    });
 })
 routes.post("/newpost", (req, res)=>{
@@ -54,6 +65,19 @@ routes.post("/login", auth.passport.authenticate('local'), (req, res)=>{
         authenticated: true
     })
 });
+
+routes.post("/likedpost", (req, res)=>{
+
+    let post=req.body.post;
+
+    if(req.user){
+        database.addLiked(req.user, post);
+    }
+
+    res.send(post);
+
+    //add else condition
+})
 
 
 

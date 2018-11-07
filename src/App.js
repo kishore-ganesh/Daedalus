@@ -16,9 +16,48 @@ class App extends Component {
     this.state = {
       posts: []
     };
+
+    setInterval(60000, this.getPosts);
+    this.updatePostState=this.updatePostState.bind(this);
   }
 
-  componentDidMount() {
+  sendUpdatedPost(post){
+    axios.post("/likedpost", {post: post});
+  }
+
+      //can make this more efficient by mapping to id
+  updatePostState(post){
+      this.setState((state)=>{
+        for(let j=0;j<state.posts.length; j++){
+        
+          if(state.posts[j]._id.toString()==post._id.toString()){
+            if(state.posts[j].liked==undefined){
+              state.posts[j].liked=true;
+              
+            }
+
+            if(!state.posts[j].stars){
+              state.posts[j].stars=0;
+            }
+            state.posts[j].liked=!state.posts[j].liked;
+            if(state.posts[j].liked){
+              state.posts[j].stars++;
+            }
+
+            else{
+              state.posts[j].stars--;
+            }
+            
+            this.sendUpdatedPost(state.posts[j]);
+          }
+        }
+
+        return state; 
+        //make this pure
+      })
+  }
+
+  getPosts(){
     axios.post("/posts").then(response => {
       console.log(response.data);
 
@@ -30,16 +69,17 @@ class App extends Component {
       });
     });
   }
+
+  componentDidMount() {
+    this.getPosts();
+  }
   render() {
     let postitems = this.state.posts.map(item => {
-      console.log(item.headerImage);
+     
       return (
-        <BlogPost
-          key={item.title}
-          title={item.title}
-          author={item.author}
-          postContent={item.postContent}
-          headerImage={item.headerImage}
+        <BlogPost key={item._id}
+         post= {item}
+         postUpdateCallback = {this.updatePostState}
         />
       );
     });
@@ -54,6 +94,7 @@ class App extends Component {
                 path="/"
                 exact
                 render={() => {
+                  
                   return <>{postitems}</>;
                 }}
               />
