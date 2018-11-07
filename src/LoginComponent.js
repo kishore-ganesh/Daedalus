@@ -29,7 +29,7 @@ class LoginForm extends React.Component {
     if (this.state.login) {
       innerComponent = (
         <div className="innerLogin">
-          <LoginComponent />
+          <LoginComponent setAuthorized={this.props.setAuthorized}/>
           <button className="loginstatebutton" onClick={this.changeLoginState}>
             Not a user yet?
           </button>
@@ -79,12 +79,17 @@ class LoginComponent extends React.Component {
         password: this.state.password
       })
       .then(response => {
+        
         this.setState({
           username: "",
           password: ""
         });
+
+        //redirect to root
+        this.props.setAuthorized(true);
       })
       .catch(err => {
+        console.log(err);
         console.log(err.response.status);
       });
   }

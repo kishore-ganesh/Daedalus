@@ -8,7 +8,7 @@ class BlogPost extends React.Component {
     {
       super(props);
       this.state={
-        starClass: props.post.liked?"fas fa-star":"far fa-star"
+        starClass: this.props.post.liked?"fas fa-star":"far fa-star"
       }
 
       this.onHover=this.onHover.bind(this);

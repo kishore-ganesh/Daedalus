@@ -79,6 +79,43 @@ routes.post("/likedpost", (req, res)=>{
     //add else condition
 })
 
+routes.post("/getLikedPosts", (req, res)=>{
+    if(req.user){
+        database.getLikedPosts(req.user).then((posts)=>{
+            console.log(posts);
+            res.send(posts);
+        })
+    }
+
+    else{
+        // res.setHeader
+    }
+
+})
+
+routes.post("/getUserInfo", (req, res)=>{
+
+    if(req.user)
+    {
+        res.send(req.user);
+    }
+
+    else{
+        //if unahtorized
+    }
+})
+
+routes.post("/isAuthorized", (req, res)=>{
+    if(req.user){
+        res.send({
+            authorized: true
+        })
+    }
+    else{
+        res.send({authorized: false})
+    }
+})
+
 
 
 module.exports=routes;

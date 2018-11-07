@@ -61,7 +61,7 @@ class PostInputComponent extends React.Component {
 
           else{
             this.setState({
-              title: "",
+              titleInput: "",
               contentInput: "",
               fileInput: ""
           })

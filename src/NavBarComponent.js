@@ -6,7 +6,13 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeTab: 0
+      activeTab: 0,
+      navElements: [
+        { name: "All Posts", path: "/", needsLogin: false },
+        { name: "New Post", path: "/new", needsLogin: true },
+        { name: "Login", path: "/login", needsLogin: false },
+        { name: "User Page", path: "/userpage", needsLogin: true }
+      ]
     };
 
     this.changeTab = this.changeTab.bind(this);
@@ -19,47 +25,52 @@ class NavBar extends React.Component {
   }
 
   render() {
-    return (
-      <ul className="navBar">
-        <li
-          className={"navItem" + (this.state.activeTab == 0 ? " selected" : "")}
-        >
-          <Link
-            to="/"
-            onClick={() => {
-              this.changeTab(0);
-            }}
+    let navElements = [];
+
+    for (let i = 0; i < this.state.navElements.length; i++) {
+      let element = this.state.navElements[i];
+      if (this.props.authorized) {
+        navElements.push(
+          <li
+            key={element.name}
+            className={
+              "navItem" + (this.state.activeTab == i ? " selected" : "")
+            }
           >
-            All Posts
-          </Link>
-        </li>
-        <li
-          className={"navItem" + (this.state.activeTab == 1 ? " selected" : "")}
-        >
-          <Link
-            to="/new"
-            onClick={() => {
-              this.changeTab(1);
-            }}
-          >
-            New Post
-          </Link>
-        </li>
-        <li
-          className="navItem"
-          className={"navItem" + (this.state.activeTab == 2 ? " selected" : "")}
-        >
-          <Link
-            to="/login"
-            onClick={() => {
-              this.changeTab(2);
-            }}
-          >
-            Login
-          </Link>
-        </li>
-      </ul>
-    );
+            <Link
+              to={element.path}
+              onClick={() => {
+                this.changeTab(i);
+              }}
+            >
+              {element.name}
+            </Link>
+          </li>
+        );
+      } else {
+        if (!element.needsLogin) {
+          navElements.push(
+            <li
+              key={element.name}
+              className={
+                "navItem" + (this.state.activeTab == i ? " selected" : "")
+              }
+            >
+              <Link
+                to={element.path}
+                onClick={() => {
+                  this.changeTab(i);
+                }}
+              >
+                {element.name}
+              </Link>
+            </li>
+          );
+        }
+      }
+    }
+    // navElements.push();
+    return <ul className="navBar">{navElements}</ul>;
   }
 }
 // tagged

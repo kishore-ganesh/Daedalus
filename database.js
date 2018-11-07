@@ -105,7 +105,20 @@ function addLiked(user, post){
 
 }
 
-module.exports={addToDatabase, queryDatabase, addLiked};
+
+function getLikedPosts(user){
+    return new Promise((resolve, reject)=>{
+        queryDatabase("postsdb", "posts", {
+            likedby: new ObjectId(user._id)
+        }).then((posts)=>{
+            resolve(posts);
+        }).catch((err)=>{
+            reject(err);
+        })
+    })
+    
+}
+module.exports={addToDatabase, queryDatabase, addLiked, getLikedPosts};
 
 
 
