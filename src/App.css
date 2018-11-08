@@ -25,3 +25,17 @@ a{
     padding: 50px 10px;
     height: 100%;
 }
+
+
+.error-text{
+    color: red;
+}
+.success-text{
+    color: green
+}
+
+.status{
+
+    padding: 25px 0px;
+    font-size: 1.4em;
+}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import "./PostInputComponent.css"
+import "./PostInputComponent.css";
 class PostInputComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -8,18 +8,26 @@ class PostInputComponent extends React.Component {
     this.state = {
       titleInput: "",
       contentInput: "",
-      fileInput: undefined
+      fileInput: undefined,
+      message: ""
     };
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onFileChange = this.onFileChange.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.setMessage = this.setMessage.bind(this);
   }
 
   onInputChange(inputname, e) {
     let stateParam = {};
     stateParam[inputname] = e.currentTarget.value;
     this.setState(stateParam);
+  }
+
+  setMessage(message) {
+    this.setState({
+      message: message
+    });
   }
 
   onFileChange(e) {
@@ -47,27 +55,27 @@ class PostInputComponent extends React.Component {
   onClick(e) {
     this.uploadImage(this.state.fileInput).then(imageData => {
       console.log(imageData);
-      axios.post("/newpost", {
-        title: this.state.titleInput,
-        postContent: this.state.contentInput,
-        headerImage: imageData
-      }).then((response)=>{
-
-          if(!response.data.success){
+      axios
+        .post("/newpost", {
+          title: this.state.titleInput,
+          postContent: this.state.contentInput,
+          headerImage: imageData
+        })
+        .then(response => {
+          if (!response.data.success) {
             console.log("NOT LOGGED IN");
 
             //display all posts made by  a user
-          }
-
-          else{
+          } else {
             this.setState({
               titleInput: "",
               contentInput: "",
               fileInput: ""
-          })
+            });
           }
-          
-      });
+        }).catch(err=>{
+          this.setMessage("You need to be logged in to do that");
+        });
     });
   }
 
@@ -75,6 +83,7 @@ class PostInputComponent extends React.Component {
     return (
       <div className="postInputComponent">
         <input
+          className="titleInput"
           value={this.state.titleInput}
           placeholder="Enter Title"
           onChange={e => {
@@ -94,12 +103,13 @@ class PostInputComponent extends React.Component {
         <button className="submit" onClick={this.onClick}>
           Submit Post
         </button>
+
+        <div className="status error-text">{this.state.message}</div>
       </div>
     );
   }
 }
 
-
 //only shown if authenticated
 
-export default PostInputComponent
+export default PostInputComponent;

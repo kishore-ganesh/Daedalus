@@ -4,19 +4,34 @@
     padding: 10px;
     border-radius: 5px;
     font-family: Arial, Helvetica, sans-serif;
+    margin: 10px 0px;
+    width: 10%;
+    font-size: 1.2em;
   }
   
   .postInputComponent {
     display: flex;
     flex-direction: column;
     padding-top: 25px;
+    width: 80%;
+    margin: auto;
+    
   
   }
   
   .contentInput {
     resize: none;
-    height: 500px;
-    margin-top: 10px;
+    min-height: 300px;
+    margin: 10px 0px;
+    font-size: 1.2em;
+    padding: 10px;
+
   }
+
+  .titleInput{
+    padding: 10px;
+    font-size: 1.4em;
+  }
+
   
   

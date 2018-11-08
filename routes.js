@@ -48,8 +48,7 @@ routes.post("/newpost", (req, res)=>{
     }
 
     else{
-        res.send({success: false,
-        reason: "unverified"})
+        res.status(401).send();
     }
     
     
