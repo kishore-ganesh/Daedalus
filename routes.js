@@ -18,6 +18,7 @@ routes.post('/posts', (req, res)=>{
             
             for(let j=0; j<post.likedby.length;j++){
                 if(post.likedby[j].toString()==req.user._id.toString()){
+            
                     post.liked=true;
                     break;
                 }
@@ -80,10 +81,16 @@ routes.post("/likedpost", (req, res)=>{
 })
 
 routes.post("/getLikedPosts", (req, res)=>{
+    // database.addFieldsToRecords("postsdb", "posts", {}, {likedby:[],
+    // stars: 0
+    // })
     if(req.user){
         database.getLikedPosts(req.user).then((posts)=>{
+            console.log(req.user._id)
             console.log(posts);
             res.send(posts);
+        }).catch((err)=>{
+            console.log(err);
         })
     }
 

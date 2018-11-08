@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import NavBar from "./NavBarComponent";
 import LoginForm from "./LoginComponent";
 import UsersPageComponent from './UsersPageComponent';
+import BlogPostList from './BlogPostListComponent'
 
 //deal with state immutability?
 class App extends Component {
@@ -42,8 +43,9 @@ class App extends Component {
     this.setState(state => {
       for (let j = 0; j < state.posts.length; j++) {
         if (state.posts[j]._id.toString() == post._id.toString()) {
+          console.log("A");
           if (state.posts[j].liked == undefined) {
-            state.posts[j].liked = true;
+            state.posts[j].liked = false;
           }
 
           if (!state.posts[j].stars) {
@@ -91,15 +93,7 @@ class App extends Component {
     this.findIfAuthorized();
   }
   render() {
-    let postitems = this.state.posts.map(item => {
-      return (
-        <BlogPost
-          key={item._id}
-          post={item}
-          postUpdateCallback={this.updatePostState}
-        />
-      );
-    });
+   
 
     return (
       <Router>
@@ -113,8 +107,8 @@ class App extends Component {
               <Route
                 path="/"
                 exact
-                render={() => {
-                  return <>{postitems}</>;
+                component={() => {
+                  return <BlogPostList getPosts={this.getPosts} updatePostState={this.updatePostState} posts={this.state.posts}></BlogPostList>
                 }}
               />
               <Route
