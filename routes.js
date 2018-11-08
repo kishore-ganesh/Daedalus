@@ -150,6 +150,11 @@ routes.post("/isAuthorized", (req, res)=>{
 })
 
 
+routes.post('/logout', (req, res)=>{
+    req.logout();
+    res.send();
+})
+
 
 module.exports=routes;
 

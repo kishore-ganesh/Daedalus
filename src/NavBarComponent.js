@@ -10,8 +10,8 @@ class NavBar extends React.Component {
       navElements: [
         { name: "All Posts", path: "/", needsLogin: false },
         { name: "New Post", path: "/new", needsLogin: true },
-        { name: "Login", path: "/login", needsLogin: false },
-        { name: "User Page", path: "/userpage", needsLogin: true }
+        { name: "Login", path: "/login", needsLogin: false }
+        // { name: "User Page", path: "/userpage", needsLogin: true }
       ]
     };
 
@@ -69,8 +69,39 @@ class NavBar extends React.Component {
         }
       }
     }
+
+    let userinfo;
+    if (this.props.authorized) {
+      userinfo = (
+        <li className={"navItem" + (this.state.activeTab == 3 ? " selected" : "")}>
+          <Link
+            to="/userinfo"
+            onClick={() => {
+              this.changeTab(3);
+            }}
+          />
+        </li>
+      );
+    }
     // navElements.push();
-    return <ul className="navBar">{navElements}</ul>;
+    return (
+      <ul className="navBar">
+        <li>
+          <ul className="innerNav">{navElements}</ul>
+        </li>
+        <li>
+          <ul className="innerNav">
+            <li>
+              <button className="logoutbtn" onClick={this.props.logout}>
+                <i className="fas fa-sign-out-alt" />
+              </button>
+            </li>
+
+            {userinfo}
+          </ul>
+        </li>
+      </ul>
+    );
   }
 }
 // tagged

@@ -16,18 +16,18 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: [],
+     
       authorized: false
     };
 
-    setInterval(60000, this.getPosts);
-    this.updatePostState = this.updatePostState.bind(this);
+    
     this.setAuthorized=this.setAuthorized.bind(this);
+    this.logout=this.logout.bind(this);
+    this.findIfAuthorized=this.findIfAuthorized.bind(this);
+    
   }
 
-  sendUpdatedPost(post) {
-    axios.post("/likedpost", { post: post });
-  }
+  
 
   setAuthorized(value) {
    
@@ -36,49 +36,17 @@ class App extends Component {
     });
   }
 
+  logout(){
+    axios.post("/logout").then((response)=>{
+      this.setAuthorized(false);
+    })
+  }
+
   //at any point if not authorized anywhere, authorize it
 
   //can make this more efficient by mapping to id
-  updatePostState(post) {
-    this.setState(state => {
-      for (let j = 0; j < state.posts.length; j++) {
-        if (state.posts[j]._id.toString() == post._id.toString()) {
-          console.log("A");
-          if (state.posts[j].liked == undefined) {
-            state.posts[j].liked = false;
-          }
+ 
 
-          if (!state.posts[j].stars) {
-            state.posts[j].stars = 0;
-          }
-          state.posts[j].liked = !state.posts[j].liked;
-          if (state.posts[j].liked) {
-            state.posts[j].stars++;
-          } else {
-            state.posts[j].stars--;
-          }
-
-          this.sendUpdatedPost(state.posts[j]);
-        }
-      }
-
-      return state;
-      //make this pure
-    });
-  }
-
-  getPosts() {
-    axios.post("/posts").then(response => {
-      console.log(response.data);
-
-      response.data.sort((a, b) => {
-        return a._id > b._id;
-      });
-      this.setState({
-        posts: response.data
-      });
-    });
-  }
 
   findIfAuthorized() {
     axios.post("/isAuthorized").then(response => {
@@ -89,11 +57,11 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.getPosts();
     this.findIfAuthorized();
   }
   render() {
-   
+   console.log("RERENDER");
+   //Each time it is mounted, it calls for posts, and once it gets posts, it is mounted again
 
     return (
       <Router>
@@ -101,6 +69,7 @@ class App extends Component {
           <NavBar
             authorized={this.state.authorized}
             setAuthorized={this.setAuthorized}
+            logout={this.logout}
           />
           <div className="innerBody">
             <Switch>
@@ -108,7 +77,7 @@ class App extends Component {
                 path="/"
                 exact
                 component={() => {
-                  return <BlogPostList getPosts={this.getPosts} updatePostState={this.updatePostState} posts={this.state.posts}></BlogPostList>
+                  return <BlogPostList/>
                 }}
               />
               <Route
