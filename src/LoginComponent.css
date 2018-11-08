@@ -50,3 +50,9 @@
     margin-bottom: 20px;
 }
 
+.error-text{
+    color: red;
+}
+.success-text{
+    color: green
+}

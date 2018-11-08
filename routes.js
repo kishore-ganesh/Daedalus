@@ -60,12 +60,35 @@ routes.post("/registeruser", (req, res)=>{
     auth.addUser(user);
 })
 
-routes.post("/login", auth.passport.authenticate('local'), (req, res)=>{
-    console.log(req.user.username);
-    res.send({
-        authenticated: true
-    })
-});
+routes.post("/login", (req, res, next)=>{
+
+    auth.passport.authenticate('local', (err, user, info)=>{
+
+        if(err){
+            return next(err);
+        }
+
+        if(!user)
+        {
+            
+            return res.status(401).send(info.message);
+        }
+        else{
+            req.login(user, (err)=>{
+                if(err) return next(err);
+                else{
+                    res.send({
+                        authenticated: true
+                    })
+                 
+                }
+            }) 
+        }
+        })(req, res, next);
+        // console.log(req.user.username);
+       
+})
+
 
 routes.post("/likedpost", (req, res)=>{
 
@@ -95,6 +118,8 @@ routes.post("/getLikedPosts", (req, res)=>{
     }
 
     else{
+
+        res.status(401).send("");
         // res.setHeader
     }
 
@@ -108,6 +133,8 @@ routes.post("/getUserInfo", (req, res)=>{
     }
 
     else{
+
+        res.status(401).send("");
         //if unahtorized
     }
 })

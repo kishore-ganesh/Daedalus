@@ -9,14 +9,14 @@ function initializePassport(){
         
         database.queryDatabase("usersdb", "users", {username: username}).then((user)=>{
             if(user.length==0){
-                return done(null, false, {message: "Incorrect username"})
+                return done(null, false, {message: "IU"})
             }
            
 
             bcrypt.compare(password, user[0].password, (err, res)=>{
                 if(err) return done(err);
                 if(!res){
-                    return done(null, false, {message: "Incorrect password"});
+                    return done(null, false, {message: "IP"});
 
                 }
 

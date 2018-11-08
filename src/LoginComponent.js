@@ -59,12 +59,22 @@ class LoginComponent extends React.Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      message: ""
     };
 
     this.onInputChange = this.onInputChange.bind(this);
     this.login = this.login.bind(this);
+    this.setMessage=this.setMessage.bind(this);
   }
+
+  setMessage(message, authorized){
+    this.setState({
+      message: message,
+      messageClass: authorized?"success-text":"error-text"
+    });
+  }
+
 
   onInputChange(input, e) {
     let state = {};
@@ -82,14 +92,30 @@ class LoginComponent extends React.Component {
         
         this.setState({
           username: "",
-          password: ""
+          password: "",
+          message: "",
+          messageClass:""
         });
+
+        this.setMessage("Successfully logged in!", true);
+
+        //set message grteen?
 
         //redirect to root
         this.props.setAuthorized(true);
       })
       .catch(err => {
-        console.log(err);
+        // console.log(err);
+        if(err.response.status==401){
+          if(err.response.data=="IU")
+          {
+            this.setMessage("Incorrect Username", false);
+          }
+
+          else{
+            this.setMessage("Incorrect Password", false);
+          }
+        }
         console.log(err.response.status);
       });
   }
@@ -118,6 +144,10 @@ class LoginComponent extends React.Component {
         <button onClick={this.login} className="loginbtn">
           Login
         </button>
+
+        <div className={this.state.messageClass}>
+        {this.state.message}
+        </div>
       </>
     );
   }
