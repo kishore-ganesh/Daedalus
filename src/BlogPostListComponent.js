@@ -5,18 +5,27 @@ import axios from 'axios';
 class BlogPostList extends React.Component {
   constructor(props) {
     super(props);
-    setInterval(60000, this.getPosts);
+    
     this.getPosts = this.getPosts.bind(this);
 
     this.updatePostState = this.updatePostState.bind(this);
     this.state={
-        posts: []
+        posts: [],
+      
     }
   }
 
   componentDidMount() {
+    this.props.isActiveCallback();
+    this.setState({
+      intervalCallback: setInterval(60000, this.getPosts)
+    });
     console.log("MOUNTING");
     this.getPosts();
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.state.intervalCallback);
   }
 
 
@@ -70,6 +79,7 @@ class BlogPostList extends React.Component {
   }
 
   render() {
+    
     let postitems = this.state.posts.map(item => {
       return (
         <BlogPost

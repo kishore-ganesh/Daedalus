@@ -17,7 +17,8 @@ class App extends Component {
     super(props);
     this.state = {
      
-      authorized: false
+      authorized: false,
+      activePage: 0
     };
 
     
@@ -34,6 +35,24 @@ class App extends Component {
     this.setState({
       authorized: value
     });
+  }
+
+  setActive(value){
+    
+    console.log("SET ACTIVE CALLED");
+    this.setState((state)=>{
+      console.log(state+" "+value);
+      if(state.activePage!=value)
+      {
+        return {...state, activePage: value};
+      }
+
+      else{
+        return state;
+      }
+      
+    });
+
   }
 
   logout(){
@@ -60,7 +79,7 @@ class App extends Component {
     this.findIfAuthorized();
   }
   render() {
-   console.log("RERENDER");
+  //  console.log("RERENDER");
    //Each time it is mounted, it calls for posts, and once it gets posts, it is mounted again
 
     return (
@@ -70,25 +89,31 @@ class App extends Component {
             authorized={this.state.authorized}
             setAuthorized={this.setAuthorized}
             logout={this.logout}
+            activeTab={this.state.activePage}
           />
           <div className="innerBody">
             <Switch>
               <Route
                 path="/"
                 exact
-                component={() => {
-                  return <BlogPostList/>
+                render={() => {
+                  return <BlogPostList isActiveCallback={()=>{
+                    this.setActive(0);
+                  }}/>
                 }}
               />
               <Route
                 path="/new"
-                component={() => {
+                render={() => {
                   {
                     return (
                       <>
                         <PostInputComponent
                           authorized={this.state.authorized}
                           setAuthorized={this.setAuthorized}
+                          isActiveCallback={()=>{
+                            this.setActive(1);
+                          }}
                         />
                       </>
                     );
@@ -103,6 +128,9 @@ class App extends Component {
                       <LoginForm
                         authorized={this.state.authorized}
                         setAuthorized={this.setAuthorized}
+                        isActiveCallback={()=>{
+                          this.setActive(2);
+                        }}
                       />
                     </>
                   );
@@ -110,12 +138,15 @@ class App extends Component {
               />
               <Route
                 path="/userpage"
-                component={() => {
+                render={() => {
                   return (
                     <>
                       <UsersPageComponent
                         authorized={this.state.authorized}
                         setAuthorized={this.setAuthorized}
+                        isActiveCallback={()=>{
+                          this.setActive(3);
+                        }}
                       />
                     </>
                   );

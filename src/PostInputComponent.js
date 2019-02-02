@@ -79,7 +79,12 @@ class PostInputComponent extends React.Component {
     });
   }
 
+  componentDidMount(){
+    this.props.isActiveCallback();
+  }
+
   render() {
+    
     return (
       <div className="postInputComponent">
         <input

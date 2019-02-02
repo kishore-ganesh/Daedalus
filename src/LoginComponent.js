@@ -23,8 +23,13 @@ class LoginForm extends React.Component {
 
     e.preventDefault();
   }
+  componentDidMount(){
+    this.props.isActiveCallback();
+  }
 
   render() {
+    
+    
     let innerComponent;
     if (this.state.login) {
       innerComponent = (
@@ -39,7 +44,7 @@ class LoginForm extends React.Component {
       innerComponent = (
         <div className="innerLogin">
           <RegisterComponent />
-          <span className="loginstatebutton" onClick={this.changeLoginState}>
+          <span className="loginstatebutton" setAuthorized={this.props.setAuthorized} onClick={this.changeLoginState}>
             Already a user?
           </span>
         </div>
@@ -185,6 +190,7 @@ class RegisterComponent extends React.Component {
           password: "",
           email: ""
         });
+        this.props.setAuthorized(true);
       });
   }
 

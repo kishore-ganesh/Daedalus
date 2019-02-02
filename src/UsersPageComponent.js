@@ -22,6 +22,7 @@ class UsersPage extends React.Component {
   }
 
   componentDidMount() {
+    this.props.isActiveCallback();
 
     if(this.props.authorized){
       axios
@@ -61,7 +62,7 @@ class UsersPage extends React.Component {
   }
   render() {
     //have callback too
-
+    
     let likedPosts = this.state.likedPosts.map(post => {
       return <BlogPost key={post._id} post={post} />;
     });

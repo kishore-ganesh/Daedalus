@@ -7,7 +7,7 @@ class BlogPost extends React.Component {
     constructor(props)
     {
       super(props);
-      console.log(this.props.post.liked);
+      // console.log(this.props.post.liked);
       this.state={
         starClass: this.props.post.liked?"fas fa-star":"far fa-star"
       }

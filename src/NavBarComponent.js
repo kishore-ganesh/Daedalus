@@ -15,16 +15,26 @@ class NavBar extends React.Component {
       ]
     };
 
-    this.changeTab = this.changeTab.bind(this);
+    // this.changeTab = this.changeTab.bind(this);
   }
 
-  changeTab(tabno) {
-    this.setState({
-      activeTab: tabno
-    });
-  }
+  // changeTab(tabno) {
+  //   this.setState((state)=>{
+  //     console.log("SETTING STATE");
+  //     if(state.activeTab!=tabno)
+  //     {
+  //       return {...state, activeTab: tabno}
+  //     }
+
+  //     else{
+  //       return state;
+  //     }
+      
+  //   });
+  // }
 
   render() {
+    
     let navElements = [];
 
     for (let i = 0; i < this.state.navElements.length; i++) {
@@ -34,14 +44,12 @@ class NavBar extends React.Component {
           <li
             key={element.name}
             className={
-              "navItem" + (this.state.activeTab == i ? " selected" : "")
+              "navItem" + (this.props.activeTab == i ? " selected" : "")
             }
           >
             <Link
               to={element.path}
-              onClick={() => {
-                this.changeTab(i);
-              }}
+    
             >
               {element.name}
             </Link>
@@ -53,14 +61,12 @@ class NavBar extends React.Component {
             <li
               key={element.name}
               className={
-                "navItem" + (this.state.activeTab == i ? " selected" : "")
+                "navItem" + (this.props.activeTab == i ? " selected" : "")
               }
             >
               <Link
                 to={element.path}
-                onClick={() => {
-                  this.changeTab(i);
-                }}
+                
               >
                 {element.name}
               </Link>
@@ -71,15 +77,17 @@ class NavBar extends React.Component {
     }
 
     let userinfo;
+    
     if (this.props.authorized) {
       userinfo = (
-        <li className={"navItem" + (this.state.activeTab == 3 ? " selected" : "")}>
+        <li className={"navItem" + (this.props.activeTab == 3 ? " selected" : "")}>
           <Link
-            to="/userinfo"
-            onClick={() => {
-              this.changeTab(3);
-            }}
-          />
+            to="/userpage"
+          
+          >
+          <i className="fa fa-user" aria-hidden="true"></i>
+
+          </Link>
         </li>
       );
     }
@@ -91,13 +99,14 @@ class NavBar extends React.Component {
         </li>
         <li>
           <ul className="innerNav">
+          {userinfo}
             <li>
               <button className="logoutbtn" onClick={this.props.logout}>
                 <i className="fas fa-sign-out-alt" />
               </button>
             </li>
 
-            {userinfo}
+            
           </ul>
         </li>
       </ul>
